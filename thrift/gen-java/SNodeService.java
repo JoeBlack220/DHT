@@ -12,7 +12,7 @@ public class SNodeService {
 
     public NodeInfo join(java.lang.String ip, java.lang.String port) throws org.apache.thrift.TException;
 
-    public NodeInfo postJoin(java.lang.String ip, java.lang.String port) throws org.apache.thrift.TException;
+    public boolean postJoin(java.lang.String ip, java.lang.String port) throws org.apache.thrift.TException;
 
     public NodeInfo getNode() throws org.apache.thrift.TException;
 
@@ -22,7 +22,7 @@ public class SNodeService {
 
     public void join(java.lang.String ip, java.lang.String port, org.apache.thrift.async.AsyncMethodCallback<NodeInfo> resultHandler) throws org.apache.thrift.TException;
 
-    public void postJoin(java.lang.String ip, java.lang.String port, org.apache.thrift.async.AsyncMethodCallback<NodeInfo> resultHandler) throws org.apache.thrift.TException;
+    public void postJoin(java.lang.String ip, java.lang.String port, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException;
 
     public void getNode(org.apache.thrift.async.AsyncMethodCallback<NodeInfo> resultHandler) throws org.apache.thrift.TException;
 
@@ -72,7 +72,7 @@ public class SNodeService {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "join failed: unknown result");
     }
 
-    public NodeInfo postJoin(java.lang.String ip, java.lang.String port) throws org.apache.thrift.TException
+    public boolean postJoin(java.lang.String ip, java.lang.String port) throws org.apache.thrift.TException
     {
       send_postJoin(ip, port);
       return recv_postJoin();
@@ -86,7 +86,7 @@ public class SNodeService {
       sendBase("postJoin", args);
     }
 
-    public NodeInfo recv_postJoin() throws org.apache.thrift.TException
+    public boolean recv_postJoin() throws org.apache.thrift.TException
     {
       postJoin_result result = new postJoin_result();
       receiveBase(result, "postJoin");
@@ -171,17 +171,17 @@ public class SNodeService {
       }
     }
 
-    public void postJoin(java.lang.String ip, java.lang.String port, org.apache.thrift.async.AsyncMethodCallback<NodeInfo> resultHandler) throws org.apache.thrift.TException {
+    public void postJoin(java.lang.String ip, java.lang.String port, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
       checkReady();
       postJoin_call method_call = new postJoin_call(ip, port, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
-    public static class postJoin_call extends org.apache.thrift.async.TAsyncMethodCall<NodeInfo> {
+    public static class postJoin_call extends org.apache.thrift.async.TAsyncMethodCall<java.lang.Boolean> {
       private java.lang.String ip;
       private java.lang.String port;
-      public postJoin_call(java.lang.String ip, java.lang.String port, org.apache.thrift.async.AsyncMethodCallback<NodeInfo> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      public postJoin_call(java.lang.String ip, java.lang.String port, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.ip = ip;
         this.port = port;
@@ -196,7 +196,7 @@ public class SNodeService {
         prot.writeMessageEnd();
       }
 
-      public NodeInfo getResult() throws org.apache.thrift.TException {
+      public java.lang.Boolean getResult() throws org.apache.thrift.TException {
         if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
           throw new java.lang.IllegalStateException("Method call not finished!");
         }
@@ -300,6 +300,7 @@ public class SNodeService {
       public postJoin_result getResult(I iface, postJoin_args args) throws org.apache.thrift.TException {
         postJoin_result result = new postJoin_result();
         result.success = iface.postJoin(args.ip, args.port);
+        result.setSuccessIsSet(true);
         return result;
       }
     }
@@ -409,7 +410,7 @@ public class SNodeService {
       }
     }
 
-    public static class postJoin<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, postJoin_args, NodeInfo> {
+    public static class postJoin<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, postJoin_args, java.lang.Boolean> {
       public postJoin() {
         super("postJoin");
       }
@@ -418,12 +419,13 @@ public class SNodeService {
         return new postJoin_args();
       }
 
-      public org.apache.thrift.async.AsyncMethodCallback<NodeInfo> getResultHandler(final org.apache.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
+      public org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> getResultHandler(final org.apache.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
         final org.apache.thrift.AsyncProcessFunction fcall = this;
-        return new org.apache.thrift.async.AsyncMethodCallback<NodeInfo>() { 
-          public void onComplete(NodeInfo o) {
+        return new org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean>() { 
+          public void onComplete(java.lang.Boolean o) {
             postJoin_result result = new postJoin_result();
             result.success = o;
+            result.setSuccessIsSet(true);
             try {
               fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
             } catch (org.apache.thrift.transport.TTransportException e) {
@@ -465,7 +467,7 @@ public class SNodeService {
         return false;
       }
 
-      public void start(I iface, postJoin_args args, org.apache.thrift.async.AsyncMethodCallback<NodeInfo> resultHandler) throws org.apache.thrift.TException {
+      public void start(I iface, postJoin_args args, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
         iface.postJoin(args.ip, args.port,resultHandler);
       }
     }
@@ -1852,12 +1854,12 @@ public class SNodeService {
   public static class postJoin_result implements org.apache.thrift.TBase<postJoin_result, postJoin_result._Fields>, java.io.Serializable, Cloneable, Comparable<postJoin_result>   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("postJoin_result");
 
-    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRUCT, (short)0);
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.BOOL, (short)0);
 
     private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new postJoin_resultStandardSchemeFactory();
     private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new postJoin_resultTupleSchemeFactory();
 
-    public @org.apache.thrift.annotation.Nullable NodeInfo success; // required
+    public boolean success; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -1920,11 +1922,13 @@ public class SNodeService {
     }
 
     // isset id assignments
+    private static final int __SUCCESS_ISSET_ID = 0;
+    private byte __isset_bitfield = 0;
     public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, NodeInfo.class)));
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
       metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(postJoin_result.class, metaDataMap);
     }
@@ -1933,19 +1937,19 @@ public class SNodeService {
     }
 
     public postJoin_result(
-      NodeInfo success)
+      boolean success)
     {
       this();
       this.success = success;
+      setSuccessIsSet(true);
     }
 
     /**
      * Performs a deep copy on <i>other</i>.
      */
     public postJoin_result(postJoin_result other) {
-      if (other.isSetSuccess()) {
-        this.success = new NodeInfo(other.success);
-      }
+      __isset_bitfield = other.__isset_bitfield;
+      this.success = other.success;
     }
 
     public postJoin_result deepCopy() {
@@ -1954,32 +1958,31 @@ public class SNodeService {
 
     @Override
     public void clear() {
-      this.success = null;
+      setSuccessIsSet(false);
+      this.success = false;
     }
 
-    @org.apache.thrift.annotation.Nullable
-    public NodeInfo getSuccess() {
+    public boolean isSuccess() {
       return this.success;
     }
 
-    public postJoin_result setSuccess(@org.apache.thrift.annotation.Nullable NodeInfo success) {
+    public postJoin_result setSuccess(boolean success) {
       this.success = success;
+      setSuccessIsSet(true);
       return this;
     }
 
     public void unsetSuccess() {
-      this.success = null;
+      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __SUCCESS_ISSET_ID);
     }
 
     /** Returns true if field success is set (has been assigned a value) and false otherwise */
     public boolean isSetSuccess() {
-      return this.success != null;
+      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __SUCCESS_ISSET_ID);
     }
 
     public void setSuccessIsSet(boolean value) {
-      if (!value) {
-        this.success = null;
-      }
+      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __SUCCESS_ISSET_ID, value);
     }
 
     public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
@@ -1988,7 +1991,7 @@ public class SNodeService {
         if (value == null) {
           unsetSuccess();
         } else {
-          setSuccess((NodeInfo)value);
+          setSuccess((java.lang.Boolean)value);
         }
         break;
 
@@ -1999,7 +2002,7 @@ public class SNodeService {
     public java.lang.Object getFieldValue(_Fields field) {
       switch (field) {
       case SUCCESS:
-        return getSuccess();
+        return isSuccess();
 
       }
       throw new java.lang.IllegalStateException();
@@ -2033,12 +2036,12 @@ public class SNodeService {
       if (this == that)
         return true;
 
-      boolean this_present_success = true && this.isSetSuccess();
-      boolean that_present_success = true && that.isSetSuccess();
+      boolean this_present_success = true;
+      boolean that_present_success = true;
       if (this_present_success || that_present_success) {
         if (!(this_present_success && that_present_success))
           return false;
-        if (!this.success.equals(that.success))
+        if (this.success != that.success)
           return false;
       }
 
@@ -2049,9 +2052,7 @@ public class SNodeService {
     public int hashCode() {
       int hashCode = 1;
 
-      hashCode = hashCode * 8191 + ((isSetSuccess()) ? 131071 : 524287);
-      if (isSetSuccess())
-        hashCode = hashCode * 8191 + success.hashCode();
+      hashCode = hashCode * 8191 + ((success) ? 131071 : 524287);
 
       return hashCode;
     }
@@ -2096,11 +2097,7 @@ public class SNodeService {
       boolean first = true;
 
       sb.append("success:");
-      if (this.success == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.success);
-      }
+      sb.append(this.success);
       first = false;
       sb.append(")");
       return sb.toString();
@@ -2109,9 +2106,6 @@ public class SNodeService {
     public void validate() throws org.apache.thrift.TException {
       // check for required fields
       // check for sub-struct validity
-      if (success != null) {
-        success.validate();
-      }
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
@@ -2124,6 +2118,8 @@ public class SNodeService {
 
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
       try {
+        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+        __isset_bitfield = 0;
         read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
       } catch (org.apache.thrift.TException te) {
         throw new java.io.IOException(te);
@@ -2149,9 +2145,8 @@ public class SNodeService {
           }
           switch (schemeField.id) {
             case 0: // SUCCESS
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-                struct.success = new NodeInfo();
-                struct.success.read(iprot);
+              if (schemeField.type == org.apache.thrift.protocol.TType.BOOL) {
+                struct.success = iprot.readBool();
                 struct.setSuccessIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -2172,9 +2167,9 @@ public class SNodeService {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.success != null) {
+        if (struct.isSetSuccess()) {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
-          struct.success.write(oprot);
+          oprot.writeBool(struct.success);
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -2200,7 +2195,7 @@ public class SNodeService {
         }
         oprot.writeBitSet(optionals, 1);
         if (struct.isSetSuccess()) {
-          struct.success.write(oprot);
+          oprot.writeBool(struct.success);
         }
       }
 
@@ -2209,8 +2204,7 @@ public class SNodeService {
         org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
         java.util.BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
-          struct.success = new NodeInfo();
-          struct.success.read(iprot);
+          struct.success = iprot.readBool();
           struct.setSuccessIsSet(true);
         }
       }

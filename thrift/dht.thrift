@@ -6,7 +6,7 @@ struct NodeInfo {
 
 service SNodeService {
   NodeInfo join(1: string ip,2: string port),
-  NodeInfo postJoin(1: string ip, 2: string port),
+  bool postJoin(1: string ip, 2: string port),
   NodeInfo getNode() 
 }
 
