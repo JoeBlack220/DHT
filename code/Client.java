@@ -21,23 +21,100 @@ public class Client {
 		SNodeService.Client client = new SNodeService.Client(protocol);
 		// Try to connect
 		transport.open();
-		int flag = 1;
+		String flag= "start";
+		String setMode = "input";
+		String operationMode = "set";
 		System.out.println("Start testing!");
 		Scanner sc = new Scanner(System.in);
-		String ip;
-		String port;
+		String inputDir;
+		String bookName ;
+		String bookGenre ;
+		String bookWhole;
+		String[] bookSplited;
+		BufferedReader reader = null;
+		NodeInfo lookNode;
+		// call getNode() function here from the superNode to get a start node.
+
 		// Send input directory address and mode to server
-		while(flag != 0){
-			System.out.println("Please enter your ip:");
-			ip = sc.next();
-			System.out.println("Please enter your port:");
-			port = sc.next();
-			NodeInfo testResult = client.join(ip, port);
+		while(!flag.equals("exit")){
+			System.out.println("Select your operation (set/get): ");
+			operationMode = sc.next();
+			boolean equalsSet = operationMode.equalsIgnoreCase("set");
+			boolean equalsGet = operationMode.equalsIgnoreCase("get"); 
+			while(! (equalsSet || equalsGet)){
+				System.out.println("Wrong operation mode, please select again (set/get).");
+				operationMode = sc.next();
+			}
+			if(equalsSet){
+				System.out.println("In set mode.");
+				System.out.println("Select your set mode (file/input): ");
+				setMode = sc.next();
+				boolean equalsFile = setMode.equalsIgnoreCase("file");
+				boolean equalsInput = setMode.equalsIgnoreCase("input");
+				while(! (equalsFile || equalsInput)){
+					System.out.println("Wrong set mode, please select again (file/input)");
+					setMode = sc.next();
+				}
+				if(equalsFile){
+					System.out.println("In file mode of setting.");
+					System.out.println("Please enter the location of your file: ");
+					inputDir = sc.next();
+					File f = new File(inputDir);
+					while(!f.isFile()){
+						System.out.println("What you have just entered is not a file, please enter again: ");
+						inputDir = sc.next();
+						f = new File(inputDir);
+					}
+					try{
+						reader = new BufferedReader(new FileReader(f));
+						while((bookWhole = reader.readLine()) != null ){
+							bookSplited = bookWhole.split(":");
+							if(bookSplited.length < 2) {
+								System.out.println("The grene part of book <" + bookSplited[0] + "> is missing.");
+								System.out.println("Set this book's genre to missing.");
+								bookName = bookSplited[0];
+								bookGenre = "missing";
+							}
+							else {
+								bookName = bookSplited[0];
+								bookGenre = bookSplited[1];
+							}
+							System.out.println("Setting the book: " + bookName + "of genre: " + bookGenre + ".");
+							// call set function of node here:
+							System.out.println("Setting finished");
+						}
+					}
+					catch (Exception e){
+						System.err.println("Something wrong with the input file, end setting.");
+					}
+					
+					
+				}
+				else if(equalsInput){
+					System.out.println("In input mode of setting");
+					System.out.println("Please enter the book's name you are setting: ");
+					bookName = sc.next();
+					System.out.println("Please enter the book's genre you are setting: ");
+					bookGenre = sc.next();
+					System.out.println("Setting the book: " + bookName + "of genre: " + bookGenre + ".");
+					// call set() function of node here:
+					System.out.println("Setting finished");
+				}
+			}
+			if(equalsGet){
+				System.out.println("In get mode.");
+				System.out.println("Please enter the book's name: ");
+				bookName = sc.next();
+				// call get() fucntion of node here
+				bookGenre = "";
+				System.out.println("The genre of the book <"+ bookName + "> is: " + bookGenre + ".");
+			}
+			//NodeInfo testResult = client.join(ip, port);
 			// Log final file score ranking and elapsed time
-			System.out.println(testResult.nodeIp);
-			System.out.println("Please choose the next mode:(0 for exit)");
-			flag = sc.nextInt();
-		// Notice
+			//System.out.println(testResult.nodeIp);
+			System.out.println("Please enter exit to quit the program, enter other things to continue operating.");
+			flag = sc.next();
+			// Notice
 		}
 		System.out.println("finished job!");
 	} catch(TException e) {
