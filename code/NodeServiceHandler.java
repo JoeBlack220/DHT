@@ -94,7 +94,6 @@ public class NodeServiceHandler implements NodeService.Iface {
 	    	for (int i = 1; i <= ftSize; i ++) {
 			int tmp = (int) ((curr.nodeKey - Math.pow(2, i - 1)) % Math.pow(2, ftSize));
 			if(tmp < 0) tmp += (int) Math.pow(2, ftSize);
-			System.out.println(tmp);
 			NodeInfo p;
 	    		p = findPred(tmp, true);
 			TTransport  transport2 = new TSocket(p.nodeIp, Integer.parseInt(p.nodePort));
