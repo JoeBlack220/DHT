@@ -14,9 +14,13 @@ import java.util.Scanner;
 public class Client {
     public static void main(String [] args) {
 	 try {
-		int serverPort = 9998;
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Please enter the super node's ip address:");
+		String superNodeIp = sc.nextLine();
+		System.out.println("Please enter tne super node's port: ");
+		String serverPort = sc.nextLine();
 		// To run server and client in different machine, please modify the locahost to IP address of the server machine
-		TTransport  transport = new TSocket("localhost", serverPort);
+		TTransport  transport = new TSocket(superNodeIp, Integer.parseInt(serverPort));
 		TProtocol protocol = new TBinaryProtocol(transport);
 		SNodeService.Client client = new SNodeService.Client(protocol);
 		// Try to connect
@@ -24,8 +28,6 @@ public class Client {
 		String flag= "start";
 		String setMode = "input";
 		String operationMode = "set";
-		System.out.println("Start testing!");
-		Scanner sc = new Scanner(System.in);
 		String inputDir;
 		String bookName ;
 		String bookGenre ;
@@ -33,36 +35,49 @@ public class Client {
 		String[] bookSplited;
 		BufferedReader reader = null;
 		NodeInfo lookNode;
-		// call getNode() function here from the superNode to get a start node.
-
+		operResult res = new operResult();
+		String logFlag = "";
 		// Send input directory address and mode to server
+		// call getNode() function here from the superNode to get a start node.
+		lookNode  = client.getNode();
+		System.out.println("The starting node that the superNode assgined to you has ip: " + lookNode.nodeIp + " and the port is: " + lookNode.nodePort + ".");
+		TTransport  transportNode = new TSocket(lookNode.nodeIp, Integer.parseInt(lookNode.nodePort));
+		TProtocol protocolNode = new TBinaryProtocol(transportNode);
+		NodeService.Client clientNode = new NodeService.Client(protocolNode);
+		transportNode.open();
 		while(!flag.equals("exit")){
 			System.out.println("Select your operation (set/get): ");
-			operationMode = sc.next();
+			operationMode = sc.nextLine();
 			boolean equalsSet = operationMode.equalsIgnoreCase("set");
 			boolean equalsGet = operationMode.equalsIgnoreCase("get"); 
+			System.out.println("Do you want to print the log file of your set/get operation? (enter 'y' if you want the log file.)");
+			logFlag = sc.nextLine();
 			while(! (equalsSet || equalsGet)){
 				System.out.println("Wrong operation mode, please select again (set/get).");
-				operationMode = sc.next();
+				operationMode = sc.nextLine();
+				equalsSet = operationMode.equalsIgnoreCase("set");
+				equalsGet = operationMode.equalsIgnoreCase("get"); 
 			}
 			if(equalsSet){
 				System.out.println("In set mode.");
 				System.out.println("Select your set mode (file/input): ");
-				setMode = sc.next();
+				setMode = sc.nextLine();
 				boolean equalsFile = setMode.equalsIgnoreCase("file");
 				boolean equalsInput = setMode.equalsIgnoreCase("input");
 				while(! (equalsFile || equalsInput)){
 					System.out.println("Wrong set mode, please select again (file/input)");
-					setMode = sc.next();
+					setMode = sc.nextLine();
+					equalsFile = setMode.equalsIgnoreCase("file");
+					equalsInput = setMode.equalsIgnoreCase("input");
 				}
 				if(equalsFile){
 					System.out.println("In file mode of setting.");
 					System.out.println("Please enter the location of your file: ");
-					inputDir = sc.next();
+					inputDir = sc.nextLine();
 					File f = new File(inputDir);
 					while(!f.isFile()){
 						System.out.println("What you have just entered is not a file, please enter again: ");
-						inputDir = sc.next();
+						inputDir = sc.nextLine();
 						f = new File(inputDir);
 					}
 					try{
@@ -81,8 +96,14 @@ public class Client {
 							}
 							System.out.println("Setting the book: " + bookName + "of genre: " + bookGenre + ".");
 							// call set function of node here:
-							System.out.println("Setting finished");
+							res = clientNode.setItem(bookName, bookGenre, "This set operation has visited these nodes:");
+							if(logFlag.equals("y")) {
+								System.out.println("This is the log file of set <" + bookName +"> of genre " + bookGenre + " has the following log:");
+								System.out.println(res.log);
+							}
+							
 						}
+						System.out.println("Setting finished");
 					}
 					catch (Exception e){
 						System.err.println("Something wrong with the input file, end setting.");
@@ -93,27 +114,34 @@ public class Client {
 				else if(equalsInput){
 					System.out.println("In input mode of setting");
 					System.out.println("Please enter the book's name you are setting: ");
-					bookName = sc.next();
+					bookName = sc.nextLine();
 					System.out.println("Please enter the book's genre you are setting: ");
-					bookGenre = sc.next();
+					bookGenre = sc.nextLine();
 					System.out.println("Setting the book: " + bookName + "of genre: " + bookGenre + ".");
 					// call set() function of node here:
+					res = clientNode.setItem(bookName, bookGenre, "This set operation has visited these nodes:");
+					if(logFlag.equals("y")) {
+						System.out.println("This is the log file of set <" + bookName +"> of genre " + bookGenre + " has the following log:");
+						System.out.println(res.log);
+					}
 					System.out.println("Setting finished");
 				}
 			}
 			if(equalsGet){
 				System.out.println("In get mode.");
 				System.out.println("Please enter the book's name: ");
-				bookName = sc.next();
+				bookName = sc.nextLine();
 				// call get() fucntion of node here
-				bookGenre = "";
-				System.out.println("The genre of the book <"+ bookName + "> is: " + bookGenre + ".");
+				res = clientNode.getItem(bookName, "This get operation has visited these nodes:");
+				System.out.println("The genre of the book <"+ bookName + "> is: " + res.value + "." );
+				if(logFlag.equals("y")) {
+					System.out.println("This is the log file of get <" + bookName +">'s genre has the following log:");
+					System.out.println(res.log);
+				}
+
 			}
-			//NodeInfo testResult = client.join(ip, port);
-			// Log final file score ranking and elapsed time
-			//System.out.println(testResult.nodeIp);
 			System.out.println("Please enter exit to quit the program, enter other things to continue operating.");
-			flag = sc.next();
+			flag = sc.nextLine();
 			// Notice
 		}
 		System.out.println("finished job!");

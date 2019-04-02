@@ -9,9 +9,3 @@ service SNodeService {
   bool postJoin(1: string ip, 2: string port),
   NodeInfo getNode() 
 }
-
-service NodeService {
-  bool setItem(1: string bookTitle, 2: string gerne),
-  string getItem(1: string bookTitle),
-  bool UpdateDHT()
-}
