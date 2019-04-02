@@ -47,6 +47,7 @@ public class Node {
 		catch (Exception e){
 			e.printStackTrace();
 		}
+		// let the user input some useful information
 		System.out.println("The current ip address of this computer is: " + nip + ".");
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Please enter SNode's ip: ");
@@ -56,6 +57,7 @@ public class Node {
 		System.out.println("Please enter your port: ");
 		String nport = sc.next();
 		String showInfoFlag = "";
+		// let the computer start service, this enables it to join the DHT
 		Listener listener = new Listener(Integer.parseInt(nport), handler);
 
 		try {
@@ -77,13 +79,13 @@ public class Node {
 			Thread.sleep(1000*10l);
 			initInfo = client.join(nip, nport);
 		}
-		//Once receive identifier and a node info from super node, start initiate its finger table
+		// Once receive identifier and a node info from super node, start initiate its finger table
 		handler.init(nip, nport, initInfo);
 		System.out.println("Calling the post join fucntion now to end joining.");
 		client.postJoin(nip, nport);
+		// You can enter "show" to see all the information in the node whenever you want
 		while(!showInfoFlag.equals("exit")){
 			System.out.println("You can type 'show' any time to see the information of the node.");
-			System.out.println("You can type 'exit' any time to quit.");
 			showInfoFlag = sc.nextLine();
 			if(showInfoFlag.equals("show")){
 				handler.showInfo();

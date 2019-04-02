@@ -18,9 +18,10 @@ public class SNode {
 	public static void main(String [] args) {
 		try {	Scanner sc = new Scanner(System.in);
 			int nodeNum = 0;
+			// Set how many nodes are needed for the DHT
 			System.out.println("Please enter the node number of the DHT: ");
 			nodeNum = Integer.parseInt(sc.nextLine());
-			//Create service request handler
+			// Create service request handler
 			handler = new SNodeServiceHandler(nodeNum);
 			processor = new SNodeService.Processor(handler);
 
@@ -38,6 +39,7 @@ public class SNode {
 
 	public static void simple(SNodeService.Processor processor) {
 		try {
+			// Get the ip address of the current computer
 			InetAddress localhost;
 			String sip = "";
 			try{
@@ -48,13 +50,15 @@ public class SNode {
 				e.printStackTrace();
 			}
 			Scanner sc = new Scanner(System.in);
+			// Show the current computer's ip
 			System.out.println("Now the super node has ip: " + sip + ".");
 			System.out.println("Please enter the port of the super node: ");
+			// Set the port of the server
 			String serverPort = sc.nextLine();
-			//Create Thrift server socket
+			// Create Thrift server socket
 			TServerTransport serverTransport = new TServerSocket(Integer.parseInt(serverPort));
 			TTransportFactory factory = new TFramedTransport.Factory();
-			//Set server arguments
+			// Set server arguments
 			TServer.Args args = new TServer.Args(serverTransport);
 			args.processor(processor);  //Set handler
 			args.transportFactory(factory);  //Set FramedTransport (for performance)

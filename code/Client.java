@@ -85,8 +85,8 @@ public class Client {
 						while((bookWhole = reader.readLine()) != null ){
 							bookSplited = bookWhole.split(":");
 							if(bookSplited.length < 2) {
-								System.out.println("The grene part of book <" + bookSplited[0] + "> is missing.");
-								System.out.println("Set this book's genre to missing.");
+								System.out.println("The grene of book <" + bookSplited[0] + "> is missing.");
+								System.out.println("Set this book's genre to' missing'.");
 								bookName = bookSplited[0];
 								bookGenre = "missing";
 							}
@@ -98,8 +98,9 @@ public class Client {
 							// call set function of node here:
 							res = clientNode.setItem(bookName, bookGenre, "This set operation has visited these nodes:");
 							if(logFlag.equals("y")) {
-								System.out.println("This is the log file of set <" + bookName +"> of genre " + bookGenre + " has the following log:");
+								System.out.println("This is the log information of setting <" + bookName +"> of genre " + bookGenre + " to the DHT is: ");
 								System.out.println(res.log);
+								System.out.println();
 							}
 							
 						}
@@ -121,8 +122,9 @@ public class Client {
 					// call set() function of node here:
 					res = clientNode.setItem(bookName, bookGenre, "This set operation has visited these nodes:");
 					if(logFlag.equals("y")) {
-						System.out.println("This is the log file of set <" + bookName +"> of genre " + bookGenre + " has the following log:");
+						System.out.println("This is the log information of setting <" + bookName +"> of genre " + bookGenre + " to the DHT is:");
 						System.out.println(res.log);
+						System.out.println();
 					}
 					System.out.println("Setting finished");
 				}
@@ -135,8 +137,9 @@ public class Client {
 				res = clientNode.getItem(bookName, "This get operation has visited these nodes:");
 				System.out.println("The genre of the book <"+ bookName + "> is: " + res.value + "." );
 				if(logFlag.equals("y")) {
-					System.out.println("This is the log file of get <" + bookName +">'s genre has the following log:");
+					System.out.println("This is the log information of getting <" + bookName +">'s genre out of the DHT is:");
 					System.out.println(res.log);
+					System.out.println();
 				}
 
 			}

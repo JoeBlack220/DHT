@@ -27,7 +27,8 @@ public class SNodeServiceHandler implements SNodeService.Iface
 	public SNodeServiceHandler(int n){
 		this.nodeMax = n;
 	}
-
+	// using MD5 to compute the key of a given string
+	// if there is a duplicate key, regenerate it
 	public String getKey(String input, String range){
 		try {
 			int tempKey = 0;
@@ -65,6 +66,9 @@ public class SNodeServiceHandler implements SNodeService.Iface
 		return retNode;    
 	}
 
+	// if the join lock is false, then let node get a random node of the DHT
+	// using that node to join the new node into the DHT
+	// if the join lock is true, return nack 
 	public NodeInfo join(String ip, String port){
         	NodeInfo retNode = new NodeInfo();
 		if(!joinLock){
@@ -103,7 +107,8 @@ public class SNodeServiceHandler implements SNodeService.Iface
 		System.out.println(retNode.nodeIp);
 		return retNode;
 	}
-
+	
+	// unlock the join lock when the join is done
 	public boolean postJoin(String ip, String port){
 		if(ip.equals(curIp) && port.equals(curPort)){
 			System.out.println("Node with ip: " + ip + ", port: " + port + " finishes join the DHT.");
