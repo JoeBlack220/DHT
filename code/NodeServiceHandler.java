@@ -89,6 +89,11 @@ public class NodeServiceHandler implements NodeService.Iface {
 		System.out.println("Completed initializing the finger table.");
 	}
 
+
+	// set the size of the finger table
+	public void setSize(int tableSize){
+		ftSize = tableSize;
+	}
 	// update the finger tables of other nodes that may be influenced by the newly joined node
 	private void updateOthers(String nip, String nport) throws TException{
 	    	for (int i = 1; i <= ftSize; i ++) {
@@ -204,7 +209,7 @@ public class NodeServiceHandler implements NodeService.Iface {
 	@Override
 	public operResult setItem(String bookTitle, String genre, String prevLog) throws TException {
 		int itemKey = getKey(bookTitle, ((int)Math.pow(2,ftSize))+"");
-		System.out.println("Now this node is using to set the book <" + bookTitle + "> with the key: " + itemKey + ", into the DHT.");		
+		System.out.println("Now this node is being used to set the book <" + bookTitle + "> with the key: " + itemKey + ", into the DHT.");		
 		operResult ret = new operResult();
 		prevLog = prevLog + " node with key " + curr.nodeKey;	
 		ret.log = prevLog;

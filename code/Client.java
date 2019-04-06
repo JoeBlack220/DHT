@@ -39,13 +39,19 @@ public class Client {
 		String logFlag = "";
 		// Send input directory address and mode to server
 		// call getNode() function here from the superNode to get a start node.
-		lookNode  = client.getNode();
-		System.out.println("The starting node that the superNode assgined to you has ip: " + lookNode.nodeIp + " and the port is: " + lookNode.nodePort + ".");
-		TTransport  transportNode = new TSocket(lookNode.nodeIp, Integer.parseInt(lookNode.nodePort));
-		TProtocol protocolNode = new TBinaryProtocol(transportNode);
-		NodeService.Client clientNode = new NodeService.Client(protocolNode);
-		transportNode.open();
+	//	lookNode  = client.getNode();
+	//	System.out.println("The starting node that the superNode assgined to you has ip: " + lookNode.nodeIp + " and the port is: " + lookNode.nodePort + ".");
+	//	TTransport  transportNode = new TSocket(lookNode.nodeIp, Integer.parseInt(lookNode.nodePort));
+	//	TProtocol protocolNode = new TBinaryProtocol(transportNode);
+	//	NodeService.Client clientNode = new NodeService.Client(protocolNode);
+	//	transportNode.open();
 		while(!flag.equals("exit")){
+			lookNode  = client.getNode();
+			System.out.println("The starting node that the superNode assgined to you has ip: " + lookNode.nodeIp + " and the port is: " + lookNode.nodePort + ".");
+			TTransport  transportNode = new TSocket(lookNode.nodeIp, Integer.parseInt(lookNode.nodePort));
+			TProtocol protocolNode = new TBinaryProtocol(transportNode);
+			NodeService.Client clientNode = new NodeService.Client(protocolNode);
+			transportNode.open();
 			System.out.println("Select your operation (set/get): ");
 			operationMode = sc.nextLine();
 			boolean equalsSet = operationMode.equalsIgnoreCase("set");
@@ -146,6 +152,7 @@ public class Client {
 			System.out.println("Please enter exit to quit the program, enter other things to continue operating.");
 			flag = sc.nextLine();
 			// Notice
+			transportNode.close();
 		}
 		System.out.println("finished job!");
 	} catch(TException e) {

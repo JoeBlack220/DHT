@@ -15,14 +15,18 @@ public class SNode {
 	public static SNodeServiceHandler handler;
 	public static SNodeService.Processor processor;
 	public static int nodeNum;
+	public static int tableSize;
 	public static void main(String [] args) {
 		try {	Scanner sc = new Scanner(System.in);
 			int nodeNum = 0;
 			// Set how many nodes are needed for the DHT
 			System.out.println("Please enter the node number of the DHT: ");
 			nodeNum = Integer.parseInt(sc.nextLine());
+			System.out.println("Please enter the size of the DHT: (e.g.: enter 5 for a DHT with 2^5 = 32 entries.)");
+			tableSize = Integer.parseInt(sc.nextLine());
+			System.out.println("The DHT's size is: " + tableSize + " and the number of entries is: " + ((int) Math.pow(2,tableSize)));
 			// Create service request handler
-			handler = new SNodeServiceHandler(nodeNum);
+			handler = new SNodeServiceHandler(nodeNum, tableSize);
 			processor = new SNodeService.Processor(handler);
 
 			Runnable simple = new Runnable() {

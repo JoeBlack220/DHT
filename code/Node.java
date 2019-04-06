@@ -68,6 +68,9 @@ public class Node {
 
 			//Try to connect
 			transport.open();
+			int tableSize = client.getSize();
+			System.out.println("The DHT's size is: " + tableSize + ".");
+			handler.setSize(tableSize);
 			System.out.println("Listener starting.");
 			listener.start();
 			//Try to join DHT
@@ -79,19 +82,26 @@ public class Node {
 			Thread.sleep(1000*10l);
 			initInfo = client.join(nip, nport);
 		}
-		// Once receive identifier and a node info from super node, start initiate its finger table
-		handler.init(nip, nport, initInfo);
-		System.out.println("Calling the post join fucntion now to end joining.");
-		client.postJoin(nip, nport);
-		// You can enter "show" to see all the information in the node whenever you want
-		while(!showInfoFlag.equals("exit")){
-			System.out.println("You can type 'show' any time to see the information of the node.");
-			showInfoFlag = sc.nextLine();
-			if(showInfoFlag.equals("show")){
-				handler.showInfo();
+		if(!initInfo.nodeIp.equals("too many")){
+
+			// Once receive identifier and a node info from super node, start initiate its finger table
+			handler.init(nip, nport, initInfo);
+			System.out.println("Calling the post join fucntion now to end joining.");
+			client.postJoin(nip, nport);
+			// You can enter "show" to see all the information in the node whenever you want
+			while(!showInfoFlag.equals("exit")){
+				System.out.println("You can type 'show' any time to see the information of the node.");
+				showInfoFlag = sc.nextLine();
+				if(showInfoFlag.equals("show")){
+					handler.showInfo();
+				}
 			}
 		}
-
+		else {
+			System.out.println("Failed to join the DHT.");
+			System.out.println("Reason: too many nodes.");
+		}	
+		
 
 		} catch (Exception e) {
 			e.printStackTrace();
